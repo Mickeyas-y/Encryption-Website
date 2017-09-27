@@ -1,0 +1,121 @@
+from django.views.decorators.csrf import csrf_protect
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+from django.views.generic import View
+from .forms import RegForm
+from django.views import generic
+from django.core.urlresolvers import reverse_lazy
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.template import loader
+
+
+# Create your views here.
+
+from django.http import HttpResponse
+
+
+@csrf_protect
+def index(request):
+    c = {}
+    return render(request, 'users/index.html')
+
+@csrf_protect
+def register(request):
+    return render(request, 'users/registration_form.html')
+
+@csrf_protect
+def signin(request):
+    return render(request, 'users/login_form.html')
+
+@login_required
+def signout(request):
+    logout(request)
+    return render(request, 'users/index.html')
+
+#@csrf_protect
+#def textencryption(request):
+#    text_box_value = request.GET['text_box']
+#    print(text_box_value)
+
+#    return render(request, 'users/encrypt_text_form.html')
+
+@csrf_protect
+def encrypttext(request):
+    return render(request, 'users/encrypt_text_form.html')
+
+@csrf_protect
+def decrypttext(request):
+    return render(request, 'users/decrypt_text_form.html')
+
+class UserRegFormView(View):
+    form_class = RegForm
+    template_name = 'users/registration_form.html'
+
+    #display my form
+    def get(self, request):
+        form = self.form_class(None)
+        return render(request, self.template_name, {'form': form})
+
+    # process form data
+    def post(self, request):
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+
+            user = form.save(commit=False)
+
+            # cleaned (normalized) data
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user.first_name = form.cleaned_data['first_name']
+            user.last_name = form.cleaned_data['last_name']
+
+            user.set_password(password)
+            user.save()
+
+            # returns User objects if credentials are correct
+            user = authenticate(username=username, password=password)
+
+            if user is not None:
+
+                if user.is_active:
+                    #login(request, user)
+                    return redirect('users:signin')
+
+        return render(request, self.template_name, {'form': form})
+
+
+class UserLogFormView(View):
+    form_class = RegForm
+    template_name = 'users/login_form.html'
+
+    #display my form
+    def get(self, request):
+        form = self.form_class(None)
+        return render(request, self.template_name, {'form': form})
+
+    # process form data
+    def post(self, request):
+        form = self.form_class(request.POST)
+
+        #if form.is_valid():
+
+            #user = form.save(commit=False)
+
+        username = request.POST['username']
+        password = request.POST['password']
+            #user.save()
+            # returns User objects if credentials are correct
+        user = authenticate(username=username, password=password)
+
+        if user:
+            if user.is_active:
+                login(request, user)
+                if request.user.is_authenticated():
+                    messages.info(request, "Welcome " + user.username)
+                return redirect('users:index')
+            #else to display password incorrect
+
+        return render(request, self.template_name, {'form': form})

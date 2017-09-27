@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+</head>
+
+<link rel='stylesheet' href="/static/css/base.css"/>
+
+<body>
+<div id="mainbody">
+<div id="title"><h1>Registration form</h1></div>
+    <div id="welcome">
+        <ul>   <h3> Welcome</h3></ul>
+    <ul><ul><a href="/users" class="button">Home</a>
+        <a href="/users/instructions" class="button">Guide page</a>
+        <a href="/accounts/login" class="button">Signin</a></ul></ul>
+    </div>
+
+<div id="regfrm">
+<form name="regform" action="" method="post">{% csrf_token %}
+    <ul><label>Username:</label> <input type="text" name="username"></ul>
+    <ul><label>Password:</label> <input type="password" name="password"></ul>
+    <ul><label>Retype:</label> <input type="password" name="cnfpassword"></ul>
+    <ul><label>First Name:</label> <input type="text" name="first_name"></ul>
+    <ul><label>Last Name:</label> <input type="text" name="last_name"></ul>
+    <ul><label>Email:</label> <input type="email" name="email"></ul>
+    <input type="submit" value="Submit">
+</form>
+</div>
+    <div id="Error">{{ message }}
+    </div>
+    </div>
+</body>
+</html>

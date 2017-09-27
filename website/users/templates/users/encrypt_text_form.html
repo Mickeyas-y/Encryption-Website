@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>EncryptText</title>
+    <meta charset="UTF-8">
+
+    {% load staticfiles %}
+        {% load compress %}
+
+    {% compress js %}
+    <script type="text/javascript" src="{% static 'code.js' %}">
+    $('#encryptText').on('submit', function(){
+    encrypt();})
+    </script>
+    {% endcompress %}
+
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+    <script type="text/javascript" src="{% static 'CryptoJS_v3.1.2\rollups\aes.js' %}"></script>
+    <script type="text/javascript" src="{% static 'CryptoJS_v3.1.2\rollups\tripledes.js' %}"></script>
+    <script type="text/javascript" src="{% static 'CryptoJS_v3.1.2\rollups\rabbit.js' %}"></script>
+    <script type="text/javascript" src="{% static 'CryptoJS_v3.1.2\rollups\rc4.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'CryptoJS_v3.1.2\components\core.js' %}"></script>
+    <script type="text/javascript" src="{% static 'CryptoJS_v3.1.2\components\enc-base64.js' %}"></script>
+    <script type="text/javascript" src="{% static 'CryptoJS_v3.1.2\components\enc-utf16.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'CryptoJS_v3.1.2\components\mode-cfb.js' %}"></script>
+    <script type="text/javascript" src="{% static 'CryptoJS_v3.1.2\components\mode-ctr.js' %}"></script>
+    <script type="text/javascript" src="{% static 'CryptoJS_v3.1.2\components\mode-ecb.js' %}"></script>
+    <script type="text/javascript" src="{% static 'CryptoJS_v3.1.2\components\mode-ofb.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'CryptoJS_v3.1.2\components\pad-nopadding.js' %}"></script>
+    <script type="text/javascript" src="{% static 'CryptoJS_v3.1.2\components\pad-ansix923.js' %}"></script>
+    <script type="text/javascript" src="{% static 'CryptoJS_v3.1.2\components\pad-iso10126.js' %}"></script>
+    <script type="text/javascript" src="{% static 'CryptoJS_v3.1.2\components\pad-iso97971.js' %}"></script>
+    <script type="text/javascript" src="{% static 'CryptoJS_v3.1.2\components\pad-zeropadding.js' %}"></script>
+
+</head>
+
+<link rel='stylesheet' href="/static/css/base.css"/>
+<body>
+<div id="mainbody">
+    <div id="title"><h1>Encrypt and Upload Message</h1></div>
+
+    <div id="welcome">
+    <ul><h3> Welcome {{ user.username }} </h3></ul>
+    <a href="/users/" class="button">Home</a>
+    <a href="/users/decrypt/" class="button">Decrypt text</a>
+    <a href="/users/upload/" class="button">Upload File</a>
+    <a href="/users/decryptfile" class="button">Decrypt File</a>
+    <a href="/users/messages/" class="button">Store Messages</a>
+    <a href="/users/instructions" class="button">Guide page</a>
+    <a href="/accounts/logout/" class="button">Signout</a></ul></div>
+
+<div id="postencrypt">
+    <div id="frmTextEncrypt">
+        <h3>Encrypt message</h3>
+    <form id="encryptText" action="" method="post">{% csrf_token %}
+        <p><label>Secret: </label>
+            <input id="encsecret" value="Secret Passphrase" type="password" ></input></p>
+        <p><label>Message: </label>
+            <textarea id="enctextbox" cols="45" rows="9" style="resize: none;"></textarea></p>
+
+        <label>Algorithm</label>
+        <select id="encalgorithm">
+        <option selected="selected">AES</option>
+        <option>3DES</option>
+        <option>DES</option>
+        <option>RABBIT</option>
+        <option>RC4</option>
+        <option>HmacMD5</option>
+        <option>HmacSHA512</option>
+        <option>SHA512</option>
+        </select>
+
+        <label>Mode: </label>
+        <select id="encoption">
+            <option selected="selected">CBC</option>
+            <option>CFB</option>
+            <option>CTR</option>
+            <option>ECB</option>
+            <option>OFB</option>
+        </select>
+
+            <label>Padding: </label>
+        <select id="encpadoption">
+            <option selected="selected">Pkcs7</option>
+            <option>AnsiX923</option>
+            <option>Iso97971</option>
+            <option>Iso10126</option>
+            <option>NoPadding</option>
+            <option>ZeroPadding</option>
+        </select><p><ul><input id="encsubmit" type="button" onclick="encrypt()" value="Encrypt"></input></ul></p>
+    </form>
+</div>
+
+    <script type="text/javascript">
+    $(document).ready(function() {
+    $("#id_encrypted_message").attr('disabled', true);
+    });
+    </script>
+    <script>
+    function uploadready() {
+    $("#id_encrypted_message").attr('disabled', false);
+    }
+    </script>
+
+<div id="savemsg">
+    <h3>Post Your Messages</h3>
+{% block content %}
+<form method="Post" action="" enctype="multipart/form-data">{% csrf_token %}
+    {{ form.as_p }}
+    <ul><input type="submit" value="Upload" onclick="uploadready()"></ul>
+</form>
+    {% endblock content %}
+</div>
+</div>
+    <ul><label>Output: </label>
+    <div id="encoutput"></div></ul>
+</div>
+</body>
+</html>

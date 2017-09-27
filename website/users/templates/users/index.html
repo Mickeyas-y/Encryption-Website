@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:resize="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<link rel='stylesheet' href="/static/css/base.css"/>
+<body>
+<div id="mainbody">
+    <div id="title"><h1>Welcome to homepage</h1></div>
+
+<div id="welcome">
+    {% if user.is_authenticated %}
+    <ul>   <h3> Welcome {{ user.username }} </h3> </ul>
+        <a href="/users/encrypt/" class="button">Encrypt text</a>
+        <a href="/users/decrypt/" class="button">Decrypt text</a>
+        <a href="/users/upload" class="button">Upload File</a>
+        <a href="/users/decryptfile" class="button">Decrypt File</a>
+        <a href="/users/messages" class="button">Store Messages</a>
+        <a href="/users/instructions" class="button">Guide page</a>
+        <a href="/accounts/logout/" class="button">Signout</a>
+    {% else %}
+        <br><br><ul><ul><a href="/accounts/register" class="button">Register</a>
+                <a href="/accounts/login" class="button">Signin</a></ul></ul>
+
+    {% endif %}
+</div>
+
+
+    {% if user.is_authenticated %} {% else %}
+
+    <div id="Guestwelcome">
+    <h4>Hello and welcome to myoed where the uses of encryption are made a available to all!!!<br><br></h4>
+
+        <p>Weather you have little or no experiance with cryptography please feel free to use this application as you see fit. Instructions and helpful guides can be found <a href="/users/instructions">here</a>. For those with experience in the field of cryptography </p>
+    </div>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+    <div id="contentindex">
+    <ul><div id="allusrmessage"><h3>---Your Messages------------></h3>
+
+        {% for m in messages %}
+
+        <ul><a href="delete_m/{{ m.id }}" class="button" onclick="return confirm('Are you sure?')">Delete</a>
+            {{ m.title }}<br>
+            <p>{{ m.message }}<br>
+                {{ m.timestamp }}</p></ul>
+           {% endfor %}
+
+
+    <span class="step-links">
+        {% if messages.has_previous %}
+            <a href="?page2={{ messages.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current2">
+            Page {{ messages.number }} of {{ messages.paginator.num_pages }}
+        </span>
+
+        {% if messages.has_next %}
+            <a href="?page2={{ messages.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+
+
+    </div>
+        {% if results %}
+        <div><h3>---Search Results-----------></h3></div> {% endif %}
+        <div id="encusrmessage"><h3>---Your encrypted Messages--></h3>
+
+        {% for em in encmessages %}  {% autoescape off %}
+        <ul><a href="delete_em/{{ em.id }}" class="button" onclick="return confirm('Are you sure?')">Delete</a>
+        {{ em.title }}<br>
+            <p>{{ em.encrypted_message }}<br>
+                {{ em.timestamp }}</p></ul>
+            {% endautoescape %}{% endfor %}
+
+
+    <span class="step-links pagination">
+        {% if encmessages.has_previous %}
+            <a href="?page3={{ encmessages.previous_page_number }}">previous</a>
+        {% endif %}
+
+
+        <span class="current3">
+            Page {{ encmessages.number }} of {{ encmessages.paginator.num_pages }}
+        </span>
+
+
+        {% if encmessages.has_next %}
+            <a href="?page3={{ encmessages.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+
+
+        </div>
+    <div id="allusrfiles"><h3>---Your Files---------------></h3>{% for p in posts %}
+        <ul><a href="delete_f/{{ p.id }}" class="button" onclick="return confirm('Are you sure?')">Delete</a>
+            {{ p.postname }}<br>
+        <p>{{ p.Content }}<br>
+        {{ p.timestamp }}<br>
+            <a href="/media/{{p.file}}">{{ p.file }}</a></p></ul>
+        {% endfor %}
+
+    <span class="step-links pagination">
+        {% if posts.has_previous %}
+            <a href="?page1={{ posts.previous_page_number }}">previous</a>
+        {% endif %}
+
+
+        <span class="current1">
+            Page {{ posts.number }} of {{ posts.paginator.num_pages }}
+        </span>
+
+
+        {% if posts.has_next %}
+            <a href="?page1={{ posts.next_page_number }}">next</a>
+        {% endif %}{% endif %}
+    </span>
+
+
+    </div></ul></ul>
+        </div>
+
+
+
+</div>
+</body>
+</html>

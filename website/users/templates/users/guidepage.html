@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Instructions</title>
+</head>
+ {% load staticfiles %}
+<link rel='stylesheet' href="/static/css/base.css"/>
+<body>
+<div id="mainbody">
+
+<div id="title"><h1>Instructions</h1></div>
+<div id="welcome">
+    {% if user.is_authenticated %}
+    <ul>   <h3> Welcome {{ user.username }} </h3> </ul>
+        <a href="/users" class="button">Home</a>
+        <a href="/users/encrypt/" class="button">Encrypt text</a>
+        <a href="/users/decrypt/" class="button">Decrypt text</a>
+        <a href="/users/upload" class="button">Upload File</a>
+        <a href="/users/decryptfile" class="button">Decrypt File</a>
+        <a href="/users/messages" class="button">Store Messages</a>
+        <a href="/accounts/logout/" class="button">Signout</a>
+    {% else %}
+        <br><br><ul><ul><a href="/accounts/register" class="button">Register</a>
+                <a href="/accounts/login" class="button">Signin</a></ul></ul>
+
+    {% endif %}
+</div>
+
+    <div id="instructions">
+
+        <p><h3>Brief</h3></p>
+        <p>
+            Hi and welcome to myoed, a cryptology web application made for anyone. First of all thank you for deciding on myoed, the preceeding paragraphs will give an insite to instructions and benefits of using cryptology. Available cryptography algorithms for encrypting text messages include:
+            <li>AES
+            <li>3DES
+            <li>DES
+            <li>RC4
+            <li>Rabbit
+        </p>
+
+        <p>
+            The available algorithm for file encryption is AES. This is because AES stands for Advanced encryption standard and is recommended by the U.S. (United States) Government as it is currently the most difficult to hack or break into.
+        </p><br>
+
+        <p><h3>Instructions</h3></p>
+        <p><h4>Text encryption</h4></p>
+        <p>
+            On the text encryption page you will be faced with a form to enter some information. Please provide and remember to <b> keey secret passphrase(s) safe and out of site from annyone! </b> This is to ensure maximum protection for you and your data.
+            Once you have chosen and declared your secret please feel free to enter any text or message for safe keeping. Decide on your choice of algorithm, the default is AES as this is currently the most secure then choose the 'encrypt button'. Once you have done so your cypher text will be generated and will be available for storing. To do this simply choose your title, something to remember the message by and click upload. Done, and you cypher text is stored for later viewing at the index, or home page.
+
+        </p>
+
+        <p><h4>Text decryption</h4></p>
+        <p>
+            Once you have stored your message it will appear on the home page, from here highligh your text by clicking and draging over the cypher text, right click and choose 'copy'. From there navigate to the 'Decrypt text' page and paste your cypher text into the area labeled 'message'. Remeber your secret passphrase and provide this in the area labeled 'secret'. Please ensure you choose the same algorithm as during encryption and proceed to decrypt your message. Done, your cyphertext is now encrypted.
+        </p>
+
+        <p><h4>File upload and encryption</h4></p>
+        <p>
+            File uploading and encryption comes in two steps.
+        <ul>
+        Step one, you must choose your password <b> remember to keep this safe, secure and out of site!</b> It is important to keep all passwords safe at all times and for this to work successfully. Once you have entered a password please choose the file you want to have encrypted. <b>This must be a text file</b>, image files or other such files and or media are untested and won't work. You can now download your encrypted file, <b>be sure to save it somewhere on your filesystem where you can easily retrieve it.</b> You can either stop here or choose to continue to step two.
+        Step two, you must first perform step one. After step one is completed and you have you encrypted file you can now choose to store the file on the server. To do this, choose a 'post title', add a description in the 'content' area, neccesary if you want to remember your file. You must now click 'Choose File', select from where you have stored it and click 'Upload'.
+    </ul>
+        </p>
+
+        <p><h4>File upload and encryption</h4></p>
+        <p>
+            Storing messages is a much simpler function as these messages are unencrypted. You can store a message or text on the Post your Messages page. Simply choose a 'Title', add your message and click 'Upload'.
+            Thanks for your time and care.
+        </p>
+
+
+    </div>
+
+</div>
+
+</body>
+</html>

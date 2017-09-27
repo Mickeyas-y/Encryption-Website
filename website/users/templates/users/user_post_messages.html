@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Files</title>
+</head>
+<title>Post your messages</title>
+
+<link rel='stylesheet' href="/static/css/base.css"/>
+<body>
+<div id="mainbody">
+    <div id="title"><h1>Post Your Messages</h1></div>
+     <div id="welcome">
+    <ul>   <h3> Welcome {{ user.username }} </h3> </ul>
+        <a href="/users" class="button">Home</a>
+        <a href="/users/encrypt/" class="button">Encrypt text</a>
+        <a href="/users/decrypt/" class="button">Decrypt text</a>
+        <a href="/users/upload" class="button">Upload File</a>
+        <a href="/users/decryptfile" class="button">Decrypt File</a>
+        <a href="/users/instructions" class="button">Guide page</a>
+        <a href="/accounts/logout/" class="button">Signout</a></div>
+
+<div id="postmsg">
+{% block content %}
+<form method="Post" action="" enctype="multipart/form-data">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Upload">
+</form>
+{% endblock content %}
+</div>
+</div>
+</body>
+</html>

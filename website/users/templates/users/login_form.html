@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+
+<link rel='stylesheet' href="/static/css/base.css"/>
+
+<body>
+<div id="mainbody">
+    <div id="title"><h1>Login form</h1></div>
+    <div id="welcome">
+        <ul>   <h3> Welcome</h3></ul>
+    <ul><ul><a href="/users" class="button">Home</a>
+        <a href="/users/instructions" class="button">Guide page</a>
+        <a href="/accounts/register" class="button">Register</a></ul></ul>
+    </div>
+
+
+    <div id="loginfrm">
+<form name="logform" action="" method="post">{% csrf_token %}
+    <ul><label>Username: </label><input type="text" name="username"></ul>
+    <ul><label>Password: </label><input type="password" name="password"></ul>
+<input type="submit" value="Submit">
+</form>
+        </div>
+
+</div>
+</body>
+</html>

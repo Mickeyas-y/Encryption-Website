@@ -1,0 +1,28 @@
+<link rel='stylesheet' href="/static/css/base.css"/>
+{% load i18n %}
+
+<div id="mainbody">
+<div id="title"><h1>Registration form</h1></div>
+
+    <div id="welcome">
+        <ul>   <h3> Welcome</h3></ul>
+    <ul><ul><a href="/users" class="button">Home</a>
+        <a href="/users/instructions" class="button">Guide page</a>
+        <a href="/accounts/login" class="button">Signin</a></ul></ul>
+    </div>
+
+
+<div id="regfrm">
+{% block content %}
+
+<form method="post" action=".">
+  {% csrf_token %}
+  {{ form.as_p }}
+
+  <input type="submit" value="{% trans 'Submit' %}" />
+
+</form>
+    {% endblock %}
+</div>
+
+</div>

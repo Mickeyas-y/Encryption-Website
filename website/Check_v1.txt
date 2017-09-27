@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>EncryptText</title>
+    <meta charset="UTF-8">
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/sha512.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/hmac-md5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/hmac-sha512.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/hmac-sha256.js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/tripledes.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/rabbit.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/rc4.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/core.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/enc-base64.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/enc-utf16.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/mode-cfb.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/mode-ctr.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/mode-ecb.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/mode-ofb.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/pad-nopadding.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/pad-ansix923.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/pad-iso10126.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/pad-iso97971.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/pad-zeropadding.js"></script>
+
+
+
+<script type="text/javascript">
+ $(function() {
+  $('#encryptText').on('submit', function() {
+   var algorithm = $('#encalgorithm').find('option:selected').text();
+   var plaintext = $('#enctextbox').val();
+   var secret = $('#encsecret').val();
+   var mode = $('#encoption').find('option:selected').text();
+   var pad = $('#encpadoption').find('option:selected').text();
+
+   key = CryptoJS.enc.Base64.parse('fly12345678alltheplanetfivetimes');
+   iv = CryptoJS.enc.Base64.parse('doesnotmeanindividualvaluebutgardens7890102345blueworld');
+
+   var encMode;
+   var encPadding;
+
+   if (mode == "CBC") {
+        encMode = "CryptoJS.mode.CBC";
+   } else if (mode == "CFB") {
+        encMode = "CryptoJS.mode.CFB";
+   } else if (mode == "CTR") {
+        encMode = "CryptoJS.mode.CTR";
+   } else if (mode == "ECB") {
+        encMode = "CryptoJS.mode.ECB";
+   } else if (mode == "OFB") {
+        encMode = "CryptoJS.mode.OFB";
+   }
+
+   if (pad == "Pkcs7") {
+        encPadding = "CryptoJS.pad.Pkcs7";
+   } else if (pad == "AnsiX923") {
+        encPadding = "CryptoJS.pad.AnsiX923";
+   } else if (pad == "Iso97971") {
+        encPadding = "CryptoJS.pad.Iso97971";
+   } else if (pad == "Iso10126") {
+        encPadding = "CryptoJS.pad.Iso10126";
+   } else if (pad == "NoPadding") {
+        encPadding = "CryptoJS.pad.NoPadding";
+   } else if (pad == "ZeroPadding") {
+        encPadding = "CryptoJS.pad.ZeroPadding";
+   }
+
+   alert(pad + " " + mode);
+
+      if (algorithm == "AES") {
+       if ((mode == "CBC") && (pad == "Pkcs7")) {
+       var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7});
+       } else if ((mode == "CBC") && (pad == "AnsiX923")) {
+        var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.AnsiX923});
+       } else if ((mode == "CBC") && (pad == "Iso97971")) {
+       var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Iso97971});
+       } else if ((mode == "CBC") && (pad == "Iso10126")) {
+       var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Iso10126});
+       } else if ((mode == "CBC") && (pad == "ZeroPadding")) {
+       var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.ZeroPadding});
+       } else if ((mode == "CBC") && (pad == "NoPadding")) {
+       var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.NoPadding});
+       } else if ((mode == "CFB") && (pad == "Pkcs7")) {
+       var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CFB, padding: CryptoJS.pad.Pkcs7});
+       }  else if ((mode == "CFB") && (pad == "AnsiX923")) {
+        var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CFB, padding: CryptoJS.pad.AnsiX923});
+       } else if ((mode == "CFB") && (pad == "Iso97971")) {
+       var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CFB, padding: CryptoJS.pad.Iso97971});
+       } else if ((mode == "CFB") && (pad == "Iso10126")) {
+       var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CFB, padding: CryptoJS.pad.Iso10126});
+       } else if ((mode == "CFB") && (pad == "NoPadding")) {
+       var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CFB, padding: CryptoJS.pad.NoPadding});
+       } else if ((mode == "CFB") && (pad == "ZeroPadding")) {
+       var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CFB, padding: CryptoJS.pad.ZeroPadding});
+       } else if ((mode == "CTR") && (pad == "Pkcs7")) {
+       var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CTR, padding: CryptoJS.pad.Pkcs7});
+       }  else if ((mode == "CTR") && (pad == "AnsiX923")) {
+        var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CTR, padding: CryptoJS.pad.AnsiX923});
+       } else if ((mode == "CTR") && (pad == "Iso97971")) {
+       var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CTR, padding: CryptoJS.pad.Iso97971});
+       } else if ((mode == "CTR") && (pad == "Iso10126")) {
+       var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CTR, padding: CryptoJS.pad.Iso10126});
+       } else if ((mode == "CTR") && (pad == "NoPadding")) {
+       var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CTR, padding: CryptoJS.pad.NoPadding});
+       } else if ((mode == "CTR") && (pad == "ZeroPadding")) {
+       var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CTR, padding: CryptoJS.pad.ZeroPadding});
+       } else if ((mode == "ECB") && (pad == "Pkcs7")) {
+       var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7});
+       }  else if ((mode == "ECB") && (pad == "AnsiX923")) {
+        var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.AnsiX923});
+       } else if ((mode == "ECB") && (pad == "Iso97971")) {
+       var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Iso97971});
+       } else if ((mode == "ECB") && (pad == "Iso10126")) {
+       var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Iso10126});
+       } else if ((mode == "ECB") && (pad == "NoPadding")) {
+       var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding});
+       } else if ((mode == "ECB") && (pad == "ZeroPadding")) {
+       var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.ZeroPadding});
+       }  else if ((mode == "OFB") && (pad == "Pkcs7")) {
+       var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.OFB, padding: CryptoJS.pad.Pkcs7});
+       }  else if ((mode == "OFB") && (pad == "AnsiX923")) {
+        var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.OFB, padding: CryptoJS.pad.AnsiX923});
+       } else if ((mode == "OFB") && (pad == "Iso97971")) {
+       var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.OFB, padding: CryptoJS.pad.Iso97971});
+       } else if ((mode == "OFB") && (pad == "Iso10126")) {
+       var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.OFB, padding: CryptoJS.pad.Iso10126});
+       } else if ((mode == "OFB") && (pad == "NoPadding")) {
+       var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.OFB, padding: CryptoJS.pad.NoPadding});
+       } else if ((mode == "OFB") && (pad == "ZeroPadding")) {
+       var encrypted = CryptoJS.AES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.OFB, padding: CryptoJS.pad.ZeroPadding});
+       }
+   } else if (algorithm == "3DES") {
+       if ((mode == "CBC") && (pad == "Pkcs7")) {
+       var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7});
+       } else if ((mode == "CBC") && (pad == "AnsiX923")) {
+        var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.AnsiX923});
+       } else if ((mode == "CBC") && (pad == "Iso97971")) {
+       var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Iso97971});
+       } else if ((mode == "CBC") && (pad == "Iso10126")) {
+       var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Iso10126});
+       } else if ((mode == "CBC") && (pad == "ZeroPadding")) {
+       var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.ZeroPadding});
+       } else if ((mode == "CBC") && (pad == "NoPadding")) {
+       var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.NoPadding});
+       } else if ((mode == "CFB") && (pad == "Pkcs7")) {
+       var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CFB, padding: CryptoJS.pad.Pkcs7});
+       }  else if ((mode == "CFB") && (pad == "AnsiX923")) {
+        var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CFB, padding: CryptoJS.pad.AnsiX923});
+       } else if ((mode == "CFB") && (pad == "Iso97971")) {
+       var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CFB, padding: CryptoJS.pad.Iso97971});
+       } else if ((mode == "CFB") && (pad == "Iso10126")) {
+       var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CFB, padding: CryptoJS.pad.Iso10126});
+       } else if ((mode == "CFB") && (pad == "NoPadding")) {
+       var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CFB, padding: CryptoJS.pad.NoPadding});
+       } else if ((mode == "CFB") && (pad == "ZeroPadding")) {
+       var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CFB, padding: CryptoJS.pad.ZeroPadding});
+       } else if ((mode == "CTR") && (pad == "Pkcs7")) {
+       var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CTR, padding: CryptoJS.pad.Pkcs7});
+       }  else if ((mode == "CTR") && (pad == "AnsiX923")) {
+        var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CTR, padding: CryptoJS.pad.AnsiX923});
+       } else if ((mode == "CTR") && (pad == "Iso97971")) {
+       var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CTR, padding: CryptoJS.pad.Iso97971});
+       } else if ((mode == "CTR") && (pad == "Iso10126")) {
+       var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CTR, padding: CryptoJS.pad.Iso10126});
+       } else if ((mode == "CTR") && (pad == "NoPadding")) {
+       var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CTR, padding: CryptoJS.pad.NoPadding});
+       } else if ((mode == "CTR") && (pad == "ZeroPadding")) {
+       var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CTR, padding: CryptoJS.pad.ZeroPadding});
+       } else if ((mode == "ECB") && (pad == "Pkcs7")) {
+       var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7});
+       }  else if ((mode == "ECB") && (pad == "AnsiX923")) {
+        var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.AnsiX923});
+       } else if ((mode == "ECB") && (pad == "Iso97971")) {
+       var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Iso97971});
+       } else if ((mode == "ECB") && (pad == "Iso10126")) {
+       var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Iso10126});
+       } else if ((mode == "ECB") && (pad == "NoPadding")) {
+       var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding});
+       } else if ((mode == "ECB") && (pad == "ZeroPadding")) {
+       var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.ZeroPadding});
+       }  else if ((mode == "OFB") && (pad == "Pkcs7")) {
+       var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.OFB, padding: CryptoJS.pad.Pkcs7});
+       }  else if ((mode == "OFB") && (pad == "AnsiX923")) {
+        var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.OFB, padding: CryptoJS.pad.AnsiX923});
+       } else if ((mode == "OFB") && (pad == "Iso97971")) {
+       var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.OFB, padding: CryptoJS.pad.Iso97971});
+       } else if ((mode == "OFB") && (pad == "Iso10126")) {
+       var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.OFB, padding: CryptoJS.pad.Iso10126});
+       } else if ((mode == "OFB") && (pad == "NoPadding")) {
+       var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.OFB, padding: CryptoJS.pad.NoPadding});
+       } else if ((mode == "OFB") && (pad == "ZeroPadding")) {
+       var encrypted = CryptoJS.TripleDES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.OFB, padding: CryptoJS.pad.ZeroPadding});
+       }
+
+   } else if (algorithm == "DES") {
+
+
+       if ((mode == "CBC") && (pad == "Pkcs7")) {
+       var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7});
+       } else if ((mode == "CBC") && (pad == "AnsiX923")) {
+        var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.AnsiX923});
+       } else if ((mode == "CBC") && (pad == "Iso97971")) {
+       var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Iso97971});
+       } else if ((mode == "CBC") && (pad == "Iso10126")) {
+       var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Iso10126});
+       } else if ((mode == "CBC") && (pad == "ZeroPadding")) {
+       var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.ZeroPadding});
+       } else if ((mode == "CBC") && (pad == "NoPadding")) {
+       var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.NoPadding});
+       } else if ((mode == "CFB") && (pad == "Pkcs7")) {
+       var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CFB, padding: CryptoJS.pad.Pkcs7});
+       }  else if ((mode == "CFB") && (pad == "AnsiX923")) {
+        var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CFB, padding: CryptoJS.pad.AnsiX923});
+       } else if ((mode == "CFB") && (pad == "Iso97971")) {
+       var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CFB, padding: CryptoJS.pad.Iso97971});
+       } else if ((mode == "CFB") && (pad == "Iso10126")) {
+       var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CFB, padding: CryptoJS.pad.Iso10126});
+       } else if ((mode == "CFB") && (pad == "NoPadding")) {
+       var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CFB, padding: CryptoJS.pad.NoPadding});
+       } else if ((mode == "CFB") && (pad == "ZeroPadding")) {
+       var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CFB, padding: CryptoJS.pad.ZeroPadding});
+       } else if ((mode == "CTR") && (pad == "Pkcs7")) {
+       var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CTR, padding: CryptoJS.pad.Pkcs7});
+       }  else if ((mode == "CTR") && (pad == "AnsiX923")) {
+        var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CTR, padding: CryptoJS.pad.AnsiX923});
+       } else if ((mode == "CTR") && (pad == "Iso97971")) {
+       var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CTR, padding: CryptoJS.pad.Iso97971});
+       } else if ((mode == "CTR") && (pad == "Iso10126")) {
+       var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CTR, padding: CryptoJS.pad.Iso10126});
+       } else if ((mode == "CTR") && (pad == "NoPadding")) {
+       var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CTR, padding: CryptoJS.pad.NoPadding});
+       } else if ((mode == "CTR") && (pad == "ZeroPadding")) {
+       var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.CTR, padding: CryptoJS.pad.ZeroPadding});
+       } else if ((mode == "ECB") && (pad == "Pkcs7")) {
+       var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7});
+       }  else if ((mode == "ECB") && (pad == "AnsiX923")) {
+        var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.AnsiX923});
+       } else if ((mode == "ECB") && (pad == "Iso97971")) {
+       var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Iso97971});
+       } else if ((mode == "ECB") && (pad == "Iso10126")) {
+       var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Iso10126});
+       } else if ((mode == "ECB") && (pad == "NoPadding")) {
+       var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding});
+       } else if ((mode == "ECB") && (pad == "ZeroPadding")) {
+       var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.ZeroPadding});
+       }  else if ((mode == "OFB") && (pad == "Pkcs7")) {
+       var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.OFB, padding: CryptoJS.pad.Pkcs7});
+       }  else if ((mode == "OFB") && (pad == "AnsiX923")) {
+        var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.OFB, padding: CryptoJS.pad.AnsiX923});
+       } else if ((mode == "OFB") && (pad == "Iso97971")) {
+       var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.OFB, padding: CryptoJS.pad.Iso97971});
+       } else if ((mode == "OFB") && (pad == "Iso10126")) {
+       var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.OFB, padding: CryptoJS.pad.Iso10126});
+       } else if ((mode == "OFB") && (pad == "NoPadding")) {
+       var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.OFB, padding: CryptoJS.pad.NoPadding});
+       } else if ((mode == "OFB") && (pad == "ZeroPadding")) {
+       var encrypted = CryptoJS.DES.encrypt(plaintext, secret, key, { iv: iv, mode: CryptoJS.mode.OFB, padding: CryptoJS.pad.ZeroPadding});
+       }
+
+   } else if (algorithm == "RABBIT") {
+        var encrypted = CryptoJS.Rabbit.encrypt(plaintext, secret, key, { iv: iv, mode: encMode, padding: encPadding});
+   } else if (algorithm == "RC4") {
+        var encrypted = CryptoJS.RC4.encrypt(plaintext, secret, key, { iv: iv, mode: encMode, padding: encPadding});
+   } else if (algorithm == "HmacSHA512") {
+        var encrypted = CryptoJS.HmacSHA512(plaintext, secret, key, { iv: iv, mode: encMode, padding: encPadding});
+   } else if (algorithm == "SHA512") {
+        var encrypted = CryptoJS.SHA512(plaintext, secret, key, { iv: iv, mode: encMode, padding: encPadding});
+   } else if (algorithm == "HmacMD5") {
+        var encrypted = CryptoJS.HmacMD5(plaintext, secret, key, { iv: iv, mode: encMode, padding: encPadding});
+   }
+
+
+
+   $("#encoutput").prepend("<br><br>Encrypted: " + encrypted );
+   $("#encoutput").prepend("<br><br>Original: " + plaintext );
+
+
+   return false;
+  });
+  });
+
+</script>
+
+</head>
+<body>
+<h1>Encrypt Text Area</h1>
+
+The quick brown fox jumped over the lazy dog and the elephant flew over them with very large wings. - *for debugging and testing <br><br>
+
+<container id = "frmTextEncrypt">
+<form id="encryptText" action="" method="post">{% csrf_token %}
+    <label>Secret</label><br>
+    <input id="encsecret" value="Secret Passphrase"><br>
+    <label>Text</label><br>
+    <textarea id="enctextbox" cols="50" rows="10" style="resize: none;"></textarea><br>
+
+    <label>Algorithm</label>
+    <select id="encalgorithm">
+    <option selected="selected">AES</option>
+    <option>3DES</option>
+    <option>DES</option>
+    <option>RABBIT</option>
+    <option>RC4</option>
+    <option>HmacMD5</option>
+    <option>HmacSHA512</option>
+    <option>SHA512</option>
+    </select>
+
+    <label>Mode: </label>
+    <select id="encoption">
+        <option selected="selected">CBC</option>
+        <option>CFB</option>
+        <option>CTR</option>
+        <option>ECB</option>
+        <option>OFB</option>
+    </select>
+
+        <label>Padding: </label>
+    <select id="encpadoption">
+        <option selected="selected">Pkcs7</option>
+        <option>AnsiX923</option>
+        <option>Iso97971</option>
+        <option>Iso10126</option>
+        <option>NoPadding</option>
+        <option>ZeroPadding</option>
+    </select><br><br>
+    <input id="encsubmit" type="submit"><br>
+</form>
+</container>
+
+
+<a href="/users">Home</a> <br>
+<a href="/users/decrypt/">Decrypt text</a><br><br>
+
+<label>Output</label><br>
+<div id="encoutput"></div>
+
+</body>
+</html>

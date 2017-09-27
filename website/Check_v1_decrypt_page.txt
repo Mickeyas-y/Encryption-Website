@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>DecryptText</title>
+    <meta charset="UTF-8">
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/tripledes.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/rabbit.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/rc4.js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/core.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/enc-base64.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/enc-utf16.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/mode-cfb.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/mode-ctr.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/mode-ecb.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/mode-ofb.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/pad-nopadding.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/pad-ansix923.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/pad-iso10126.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/pad-iso97971.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/pad-zeropadding.js"></script>
+
+
+<script type="text/javascript">
+ $(function() {
+  $('#decryptText').on('submit', function() {
+   var algorithm = $('#decalgorithm').find('option:selected').text();
+   var encrypted = $('#textbox').val();
+   var secret = $('#secret').val();
+
+   var mode = $('#decoption').find('option:selected').text();
+   var pad = $('#decpadoption').find('option:selected').text();
+
+   key = CryptoJS.enc.Base64.parse('fly12345678alltheplanetfivetimes');
+   iv = CryptoJS.enc.Base64.parse('doesnotmeanindividualvaluebutgardens7890102345blueworld');
+
+   var decMode;
+   var decPadding;
+
+   if (mode == "CBC") {
+        decMode = "CryptoJS.mode.CBC";
+   } else if (mode == "CFB") {
+        decMode = "CryptoJS.mode.CFB";
+   } else if (mode == "CTR") {
+        decMode = "CryptoJS.mode.CTR";
+   } else if (mode == "ECB") {
+        decMode = "CryptoJS.mode.ECB";
+   } else if (mode == "OFB") {
+        decMode = "CryptoJS.mode.OFB";
+   }
+
+   if (pad == "Pkcs7") {
+        decPadding = "CryptoJS.pad.Pkcs7";
+   } else if (pad == "AnsiX923") {
+        decPadding = "CryptoJS.pad.AnsiX923";
+   } else if (pad == "Iso97971") {
+        decPadding = "CryptoJS.pad.Iso97971";
+   } else if (pad == "Iso10126") {
+        decPadding = "CryptoJS.pad.Iso10126";
+   } else if (pad == "NoPadding") {
+        decPadding = "CryptoJS.pad.NoPadding";
+   } else if (pad == "ZeroPadding") {
+        decPadding = "CryptoJS.pad.ZeroPadding";
+   }
+
+    if (algorithm == "AES") {
+       var decrypted = CryptoJS.AES.decrypt(encrypted, secret, key, { iv: iv, mode: decMode, padding: decPadding});
+   } else if (algorithm == "3DES") {
+        var decrypted = CryptoJS.TripleDES.decrypt(encrypted, secret, key, { iv: iv, mode: decMode, padding: decPadding});
+   } else if (algorithm == "DES") {
+        var decrypted = CryptoJS.DES.decrypt(encrypted, secret, key, { iv: iv, mode: decMode, padding: decPadding});
+   }  else if (algorithm == "RABBIT") {
+        var decrypted = CryptoJS.Rabbit.decrypt(encrypted, secret, key, { iv: iv, mode: decMode, padding: decPadding});
+   } else if (algorithm == "RC4") {
+        var decrypted = CryptoJS.RC4.decrypt(encrypted, secret, key, { iv: iv, mode: decMode, padding: decPadding});
+   }
+
+   $("#output").prepend("<br><br> Original: " + encrypted );
+   $("#output").prepend("<br><br>Decrypted: " + decrypted.toString(CryptoJS.enc.Utf8));
+
+   return false;
+  });
+  });
+
+</script>
+
+</head>
+<body>
+<h1>Decrypt Text Area</h1>
+
+<br><br>
+
+<container id = "frmTextDecrypt">
+<form id="decryptText" action="" method="get">{% csrf_token %}
+    <label>Secret</label><br>
+    <input id="secret" value="Secret Passphrase"><br>
+    <label>Text</label><br>
+    <textarea id="textbox" cols="50" rows="10" style="resize: none;"></textarea><br>
+
+    <label>Algorithm</label>
+    <select id="decalgorithm">
+    <option selected="selected">AES</option>
+    <option>3DES</option>
+    <option>DES</option>
+    <option>RABBIT</option>
+    <option>RC4</option>
+    </select>
+
+        <label>Mode: </label>
+    <select id="decoption">
+        <option selected="selected">CBC</option>
+        <option>CFB</option>
+        <option>CTR</option>
+        <option>ECB</option>
+        <option>OFB</option>
+    </select>
+
+        <label>Padding: </label>
+    <select id="decpadoption">
+        <option selected="selected">Pkcs7</option>
+        <option>AnsiX923</option>
+        <option>Iso97971</option>
+        <option>Iso10126</option>
+        <option>NoPadding</option>
+        <option>ZeroPadding</option>
+    </select><br><br>
+
+    <input id="submit" type="submit">
+</form>
+</container><br>
+
+
+<a href="/users">Home</a> <br>
+<a href="/users/encrypt/">Encrypt text</a><br>
+
+<label>Output</label><br>
+<div id="output"></div><br>
+
+</body>
+</html>
